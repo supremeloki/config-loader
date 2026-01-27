@@ -1,3 +1,4 @@
 2026-01-24T14:22:47 initial package layout
 2026-01-25T09:28:28 init project structure
 2026-01-26T20:53:03 add pyproject and license
+2026-01-27T18:14:23 wire internal state machine
