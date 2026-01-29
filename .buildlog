@@ -3,3 +3,4 @@
 2026-01-26T20:53:03 add pyproject and license
 2026-01-27T18:14:23 wire internal state machine
 2026-01-28T09:07:19 handle empty input edge case
+2026-01-29T23:44:28 add dataclass contracts
