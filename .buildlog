@@ -5,3 +5,4 @@
 2026-01-28T09:07:19 handle empty input edge case
 2026-01-29T23:44:28 add dataclass contracts
 2026-01-30T20:59:40 implement core engine
+2026-01-31T18:50:47 introduce typed error hierarchy
