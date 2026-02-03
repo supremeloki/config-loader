@@ -8,3 +8,4 @@
 2026-01-31T18:50:47 introduce typed error hierarchy
 2026-02-01T09:07:18 harden validation paths
 2026-02-02T18:47:27 refactor module boundaries
+2026-02-03T09:40:57 extract result type
