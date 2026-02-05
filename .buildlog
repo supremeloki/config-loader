@@ -10,3 +10,4 @@
 2026-02-02T18:47:27 refactor module boundaries
 2026-02-03T09:40:57 extract result type
 2026-02-04T14:52:37 extract result type pt2
+2026-02-05T18:02:05 introduce typed error hierarchy pt2
