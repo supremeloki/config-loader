@@ -31,3 +31,6 @@ class MissingKeyError(ConfigError):
 class TypeError_(ConfigError):
     def __init__(self, key: str, expected: type, actual: type) -> None:
         super().__init__(
+            f"key {key!r} expected {expected.__name__}, got {actual.__name__}"
+        )
+
