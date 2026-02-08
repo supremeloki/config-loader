@@ -34,3 +34,5 @@ class TypeError_(ConfigError):
             f"key {key!r} expected {expected.__name__}, got {actual.__name__}"
         )
 
+
+ENV_REF_PATTERN: re.Pattern[str] = re.compile(r"^\$\{([A-Z0-9_]+)(?::-(.*))?\}$")
