@@ -39,3 +39,5 @@ ENV_REF_PATTERN: re.Pattern[str] = re.compile(r"^\$\{([A-Z0-9_]+)(?::-(.*))?\}$"
 
 _UNSET = object()
 
+
+@dataclass(frozen=True)
