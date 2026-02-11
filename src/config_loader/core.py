@@ -41,3 +41,5 @@ _UNSET = object()
 
 
 @dataclass(frozen=True)
+class ConfigSource:
+    path: Path
