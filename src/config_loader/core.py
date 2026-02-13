@@ -46,3 +46,5 @@ class ConfigSource:
     layer_name: str
 
 
+def parse_json(text: str) -> dict[str, Any]:
+    payload = json.loads(text)
