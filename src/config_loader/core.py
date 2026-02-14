@@ -48,3 +48,6 @@ class ConfigSource:
 
 def parse_json(text: str) -> dict[str, Any]:
     payload = json.loads(text)
+    if not isinstance(payload, dict):
+        raise ConfigError("top-level JSON must be an object")
+    return payload
