@@ -51,3 +51,5 @@ def parse_json(text: str) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise ConfigError("top-level JSON must be an object")
     return payload
+
+
