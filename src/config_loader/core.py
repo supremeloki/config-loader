@@ -53,3 +53,5 @@ def parse_json(text: str) -> dict[str, Any]:
     return payload
 
 
+def parse_env(text: str) -> dict[str, Any]:
+    result: dict[str, Any] = {}
