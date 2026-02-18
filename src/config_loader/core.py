@@ -58,3 +58,5 @@ def parse_env(text: str) -> dict[str, Any]:
     for line_number, raw_line in enumerate(text.splitlines(), start=1):
         line = raw_line.strip()
         if not line or line.startswith("#"):
+            continue
+        if "=" not in line:
