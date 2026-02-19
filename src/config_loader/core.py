@@ -60,3 +60,5 @@ def parse_env(text: str) -> dict[str, Any]:
         if not line or line.startswith("#"):
             continue
         if "=" not in line:
+            raise ConfigError(f"invalid env line {line_number}: {raw_line!r}")
+        key, _, value = line.partition("=")
