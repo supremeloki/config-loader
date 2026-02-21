@@ -65,3 +65,5 @@ def parse_env(text: str) -> dict[str, Any]:
         result[key.strip()] = value.strip().strip('"').strip("'")
     return result
 
+
+PARSERS: dict[str, Callable[[str], dict[str, Any]]] = {
