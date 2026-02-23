@@ -70,3 +70,5 @@ PARSERS: dict[str, Callable[[str], dict[str, Any]]] = {
     ".json": parse_json,
     ".env": parse_env,
 }
+
+
