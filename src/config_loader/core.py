@@ -74,3 +74,6 @@ PARSERS: dict[str, Callable[[str], dict[str, Any]]] = {
 
 def deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
     merged = dict(base)
+    for key, value in override.items():
+        if (key in merged and isinstance(merged[key], dict)
+                and isinstance(value, dict)):

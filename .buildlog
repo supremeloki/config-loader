@@ -30,3 +30,4 @@
 2026-02-22T11:10:37 extend public api surface
 2026-02-23T22:20:43 expose metrics hooks
 2026-02-24T20:22:26 expose metrics hooks pt2
+2026-02-25T22:14:14 wire async handlers pt2
