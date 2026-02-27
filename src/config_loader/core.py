@@ -79,3 +79,6 @@ def deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]
                 and isinstance(value, dict)):
             merged[key] = deep_merge(merged[key], value)
         else:
+            merged[key] = value
+    return merged
+
