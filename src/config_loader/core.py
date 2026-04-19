@@ -82,3 +82,5 @@ def deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]
             merged[key] = value
     return merged
 
+
+def resolve_env_references(value: Any,
