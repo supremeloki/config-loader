@@ -84,3 +84,5 @@ def deep_merge(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]
 
 
 def resolve_env_references(value: Any,
+                           environ: dict[str, str] | None = None) -> Any:
+    source = environ if environ is not None else dict(os.environ)

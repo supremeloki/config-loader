@@ -34,3 +34,4 @@
 2026-02-26T18:10:13 implement cache layer pt2
 2026-02-27T21:36:29 wire async handlers pt2
 2026-04-19T13:34:10 add cli entrypoint pt2
+2026-04-20T20:13:39 support config overrides pt2
