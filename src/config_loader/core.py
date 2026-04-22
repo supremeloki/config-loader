@@ -89,3 +89,5 @@ def resolve_env_references(value: Any,
     if isinstance(value, str):
         match = ENV_REF_PATTERN.match(value)
         if match:
+            name, default = match.group(1), match.group(2)
+            return source.get(name, default if default is not None else value)
