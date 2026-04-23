@@ -71,3 +71,5 @@ def test_defaults_underneath_files(base_file):
 
 
 def test_missing_file_raises(tmp_path):
+    with pytest.raises(ConfigFileNotFoundError):
+        ConfigLoader().load_file(tmp_path / "nope.json")
