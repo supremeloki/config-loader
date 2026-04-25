@@ -74,3 +74,5 @@ def test_missing_file_raises(tmp_path):
     with pytest.raises(ConfigFileNotFoundError):
         ConfigLoader().load_file(tmp_path / "nope.json")
 
+
+def test_unsupported_format_rejected(tmp_path):
