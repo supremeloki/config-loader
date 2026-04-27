@@ -78,3 +78,5 @@ def test_missing_file_raises(tmp_path):
 def test_unsupported_format_rejected(tmp_path):
     binary = tmp_path / "config.yaml"
     binary.write_text("key: value", encoding="utf-8")
+    with pytest.raises(UnsupportedFormatError):
+        ConfigLoader().load_file(binary)
