@@ -80,3 +80,5 @@ def test_unsupported_format_rejected(tmp_path):
     binary.write_text("key: value", encoding="utf-8")
     with pytest.raises(UnsupportedFormatError):
         ConfigLoader().load_file(binary)
+
+
