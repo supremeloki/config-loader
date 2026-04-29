@@ -82,3 +82,5 @@ def test_unsupported_format_rejected(tmp_path):
         ConfigLoader().load_file(binary)
 
 
+def test_env_parsing(tmp_path):
+    env_file = tmp_path / "secrets.env"

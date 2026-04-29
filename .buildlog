@@ -44,3 +44,4 @@
 2026-04-26T09:48:35 fix off-by-one in chunker
 2026-04-27T13:22:47 test grouping edge cases
 2026-04-28T11:51:52 guard against missing header row
+2026-04-29T10:47:30 fix flaky ordering in tests
