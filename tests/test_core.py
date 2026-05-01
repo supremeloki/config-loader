@@ -85,3 +85,5 @@ def test_unsupported_format_rejected(tmp_path):
 def test_env_parsing(tmp_path):
     env_file = tmp_path / "secrets.env"
     env_file.write_text(
+        '# comment\nAPI_KEY=abc123\nQUOTED="hello world"\n',
+        encoding="utf-8",
