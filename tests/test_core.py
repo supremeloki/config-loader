@@ -87,3 +87,5 @@ def test_env_parsing(tmp_path):
     env_file.write_text(
         '# comment\nAPI_KEY=abc123\nQUOTED="hello world"\n',
         encoding="utf-8",
+    )
+    loader = ConfigLoader().load_file(env_file)
