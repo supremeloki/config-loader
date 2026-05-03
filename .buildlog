@@ -48,3 +48,4 @@
 2026-04-30T20:06:43 regression test for parser
 2026-05-01T22:13:31 cover error branches
 2026-05-02T21:17:31 expand unit coverage
+2026-05-03T10:32:18 test streaming backpressure

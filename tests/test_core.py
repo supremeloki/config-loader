@@ -89,3 +89,5 @@ def test_env_parsing(tmp_path):
         encoding="utf-8",
     )
     loader = ConfigLoader().load_file(env_file)
+    assert loader.get("API_KEY") == "abc123"
+    assert loader.get("QUOTED") == "hello world"
