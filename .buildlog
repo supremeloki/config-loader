@@ -50,3 +50,4 @@
 2026-05-02T21:17:31 expand unit coverage
 2026-05-03T10:32:18 test streaming backpressure
 2026-05-04T09:51:46 regression test for parser pt2
+2026-05-05T17:31:52 fix off-by-one in chunker pt2

@@ -93,3 +93,4 @@ def test_env_parsing(tmp_path):
     assert loader.get("QUOTED") == "hello world"
 
 
+def test_env_reference_resolution():
