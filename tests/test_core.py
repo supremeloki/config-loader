@@ -96,3 +96,5 @@ def test_env_parsing(tmp_path):
 def test_env_reference_resolution():
     data = {"token": "${MY_TOKEN}", "retries": "${MISSING_VAR:-5}"}
     resolved = resolve_env_references(data, environ={"MY_TOKEN": "tok-999"})
+    assert resolved["token"] == "tok-999"
+    assert resolved["retries"] == "5"
