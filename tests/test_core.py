@@ -98,3 +98,5 @@ def test_env_reference_resolution():
     resolved = resolve_env_references(data, environ={"MY_TOKEN": "tok-999"})
     assert resolved["token"] == "tok-999"
     assert resolved["retries"] == "5"
+
+
