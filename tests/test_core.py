@@ -100,3 +100,5 @@ def test_env_reference_resolution():
     assert resolved["retries"] == "5"
 
 
+def test_env_ref_without_default_stays_literal():
+    resolved = resolve_env_references({"k": "${NOPE_NOT_SET}"}, environ={})
