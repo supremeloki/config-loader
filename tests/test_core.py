@@ -104,3 +104,4 @@ def test_env_ref_without_default_stays_literal():
     resolved = resolve_env_references({"k": "${NOPE_NOT_SET}"}, environ={})
     assert resolved["k"] == "${NOPE_NOT_SET}"
 
+
