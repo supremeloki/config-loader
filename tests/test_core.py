@@ -105,3 +105,5 @@ def test_env_ref_without_default_stays_literal():
     assert resolved["k"] == "${NOPE_NOT_SET}"
 
 
+def test_typed_accessors(base_file):
+    loader = ConfigLoader(environ={}).load_file(base_file)
