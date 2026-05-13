@@ -107,3 +107,5 @@ def test_env_ref_without_default_stays_literal():
 
 def test_typed_accessors(base_file):
     loader = ConfigLoader(environ={}).load_file(base_file)
+    assert loader.require_int("db.port") == 5432
+    assert loader.require_str("app.name") == "ai-suite"
