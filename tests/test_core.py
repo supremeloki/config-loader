@@ -111,3 +111,5 @@ def test_typed_accessors(base_file):
     assert loader.require_str("app.name") == "ai-suite"
     assert loader.require_bool("app.debug") is False
 
+
+def test_wrong_type_raises(base_file):
