@@ -114,3 +114,5 @@ def test_typed_accessors(base_file):
 
 def test_wrong_type_raises(base_file):
     loader = ConfigLoader().load_file(base_file)
+    with pytest.raises(ConfigError):
+        loader.require_int("app.name")
