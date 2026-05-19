@@ -118,3 +118,5 @@ def test_wrong_type_raises(base_file):
         loader.require_int("app.name")
 
 
+def test_bool_not_accepted_as_int(tmp_path):
+    tricky = write_json(tmp_path / "t.json", {"flag": True})
