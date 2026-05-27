@@ -72,3 +72,4 @@
 2026-05-24T09:07:01 bump version
 2026-05-25T19:40:39 refactor pipeline builder
 2026-05-26T09:46:11 prepare release notes
+2026-05-27T11:17:11 perf: avoid re-parsing rows
