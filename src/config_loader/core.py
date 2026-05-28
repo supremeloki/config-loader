@@ -91,3 +91,74 @@ def resolve_env_references(value: Any,
         if match:
             name, default = match.group(1), match.group(2)
             return source.get(name, default if default is not None else value)
+        return value
+    if isinstance(value, dict):
+        return {k: resolve_env_references(v, source) for k, v in value.items()}
+    if isinstance(value, list):
+        return [resolve_env_references(item, source) for item in value]
+    return value
+
+
+class ConfigLoader:
+    def __init__(self, *, use_env_refs: bool = True,
+                 environ: dict[str, str] | None = None) -> None:
+        self._use_env_refs = use_env_refs
+        self._environ = environ
+        self._layers: list[ConfigSource] = []
+        self._merged: dict[str, Any] | None = None
+
+    def load_file(self, path: Path, layer_name: str | None = None) -> "ConfigLoader":
+        if not path.exists():
+            raise ConfigFileNotFoundError(path)
+        parser = PARSERS.get(path.suffix.lower())
+        if parser is None:
+            raise UnsupportedFormatError(path.suffix)
+        data = parser(path.read_text(encoding="utf-8"))
+        self._layers.append(ConfigSource(
+            path=path, layer_name=layer_name or path.stem,
+        ))
+        self._merged = data if self._merged is None \
+            else deep_merge(self._merged, data)
+        return self
+
+    def load_defaults(self, defaults: dict[str, Any]) -> "ConfigLoader":
+        self._merged = defaults if self._merged is None \
+            else deep_merge(defaults, self._merged)
+        return self
+
+    @property
+    def data(self) -> dict[str, Any]:
+        if self._merged is None:
+            return {}
+        if self._use_env_refs:
+            return resolve_env_references(self._merged, self._environ)
+        return dict(self._merged)
+
+    def get(self, key: str, default: Any = _UNSET,
+            expected_type: type | tuple[type, ...] | None = None) -> Any:
+        current: Any = self.data
+        for part in key.split("."):
+            if not isinstance(current, dict) or part not in current:
+                if default is _UNSET:
+                    raise MissingKeyError(key)
+                return default
+            current = current[part]
+        if expected_type is not None and not isinstance(current, expected_type):
+            raise TypeError_(key, expected_type if isinstance(expected_type, type)
+                             else expected_type[0], type(current))
+        return current
+
+    def require_int(self, key: str) -> int:
+        value = self.get(key, expected_type=int)
+        if isinstance(value, bool):
+            raise TypeError_(key, int, bool)
+        return int(value)
+
+    def require_str(self, key: str) -> str:
+        return str(self.get(key, expected_type=str))
+
+    def require_bool(self, key: str) -> bool:
+        value = self.get(key, expected_type=bool)
+        if not isinstance(value, bool):
+            raise TypeError_(key, bool, type(value))
+        return value
