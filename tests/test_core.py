@@ -1,0 +1,125 @@
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+import pytest
+
+from config_loader import (
+    ConfigError,
+    ConfigFileNotFoundError,
+    ConfigLoader,
+    MissingKeyError,
+    UnsupportedFormatError,
+    deep_merge,
+    resolve_env_references,
+)
+
+
+def write_json(path: Path, payload: dict) -> Path:
+    import json
+
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    return path
+
+
+@pytest.fixture
+def base_file(tmp_path):
+    return write_json(tmp_path / "base.json", {
+        "app": {"name": "ai-suite", "debug": False, "workers": 4},
+        "db": {"host": "localhost", "port": 5432},
+    })
+
+
+def test_deep_merge_nested_dicts():
+    merged = deep_merge(
+        {"db": {"host": "a", "port": 1}, "x": 1},
+        {"db": {"host": "b"}, "y": 2},
+    )
+    assert merged == {"db": {"host": "b", "port": 1}, "x": 1, "y": 2}
+
+
+def test_load_json_and_dotted_get(base_file):
+    loader = ConfigLoader().load_file(base_file)
+    assert loader.get("app.name") == "ai-suite"
+    assert loader.get("db.port") == 5432
+
+
+def test_dotted_missing_key_raises_without_default(base_file):
+    loader = ConfigLoader().load_file(base_file)
+    with pytest.raises(MissingKeyError):
+        loader.get("ghost.key")
+    assert loader.get("ghost.key", default="fallback") == "fallback"
+
+
+def test_layered_files_override(tmp_path, base_file):
+    override = write_json(tmp_path / "override.json", {
+        "app": {"debug": True},
+        "db": {"port": 6543},
+    })
+    loader = ConfigLoader().load_file(base_file).load_file(override)
+    assert loader.get("app.debug") is True
+    assert loader.get("app.name") == "ai-suite"
+    assert loader.get("db.port") == 6543
+
+
+def test_defaults_underneath_files(base_file):
+    loader = (ConfigLoader()
+              .load_defaults({"extra": {"flag": True}})
+              .load_file(base_file))
+    assert loader.get("extra.flag") is True
+
+
+def test_missing_file_raises(tmp_path):
+    with pytest.raises(ConfigFileNotFoundError):
+        ConfigLoader().load_file(tmp_path / "nope.json")
+
+
+def test_unsupported_format_rejected(tmp_path):
+    binary = tmp_path / "config.yaml"
+    binary.write_text("key: value", encoding="utf-8")
+    with pytest.raises(UnsupportedFormatError):
+        ConfigLoader().load_file(binary)
+
+
+def test_env_parsing(tmp_path):
+    env_file = tmp_path / "secrets.env"
+    env_file.write_text(
+        '# comment\nAPI_KEY=abc123\nQUOTED="hello world"\n',
+        encoding="utf-8",
+    )
+    loader = ConfigLoader().load_file(env_file)
+    assert loader.get("API_KEY") == "abc123"
+    assert loader.get("QUOTED") == "hello world"
+
+
+def test_env_reference_resolution():
+    data = {"token": "${MY_TOKEN}", "retries": "${MISSING_VAR:-5}"}
+    resolved = resolve_env_references(data, environ={"MY_TOKEN": "tok-999"})
+    assert resolved["token"] == "tok-999"
+    assert resolved["retries"] == "5"
+
+
+def test_env_ref_without_default_stays_literal():
+    resolved = resolve_env_references({"k": "${NOPE_NOT_SET}"}, environ={})
+    assert resolved["k"] == "${NOPE_NOT_SET}"
+
+
+def test_typed_accessors(base_file):
+    loader = ConfigLoader(environ={}).load_file(base_file)
+    assert loader.require_int("db.port") == 5432
+    assert loader.require_str("app.name") == "ai-suite"
+    assert loader.require_bool("app.debug") is False
+
+
+def test_wrong_type_raises(base_file):
+    loader = ConfigLoader().load_file(base_file)
+    with pytest.raises(ConfigError):
+        loader.require_int("app.name")
+
+
+def test_bool_not_accepted_as_int(tmp_path):
+    tricky = write_json(tmp_path / "t.json", {"flag": True})
+    loader = ConfigLoader().load_file(tricky)
+    with pytest.raises(ConfigError):
+        loader.require_int("flag")
